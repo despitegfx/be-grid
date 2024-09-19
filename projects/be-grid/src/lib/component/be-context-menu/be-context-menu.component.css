@@ -1,40 +1,40 @@
 .contextmenu{
     display: flex;
     flex-direction: column;
-    row-gap: 15px;
     position: absolute;
     z-index: 1000;
     background: rgb(248, 248, 248);
-    box-shadow: 0 5px 10px 5px rgb(228, 228, 228);
+    box-shadow: 0 5px 20px 5px rgb(0, 0, 0, 0.1);
     border-radius: 3px;
-    padding-block: 15px;
+    padding-block: 8px;
     border-style: solid;
     border-color:  rgb(228, 228, 228);
     border-width: 0.7px;
-    width: fit-content;
+    width: 300px;
     font-size: 15px;
-    transition: 0.3s ease-in;
+    transition: 0.1s ease-in;
 }
 
 .menu-item {
     padding-inline: 20px;
-    gap: 8px;
+    padding-block: 10px;
+    gap: 15px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    color: rgb(44, 95, 177);
+    color: rgb(37, 37, 37);
 }
 
 .menu-item:hover {
-    color: rgb(28, 71, 142);
-    transition: 0.3s ease-in;
+    background: rgba(15, 76, 138, 0.06);
+    transition: 0.1s ease-in;
 }
 
 i{
-    font-size: 15pt;
+    font-size: 13pt;
 }
 
-.seperator{
+.separator{
     width: 100%;
     height: 0.7px;
     background: rgb(210, 210, 210);

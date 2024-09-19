@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import {MatSort, Sort} from '@angular/material/sort';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
 import { MatPaginator } from '@angular/material/paginator';
-import {CdkDragDrop, CdkDrag, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {SelectionModel} from '@angular/cdk/collections';
 
 @Component({
@@ -36,7 +36,19 @@ export class BeGridComponent implements OnInit, AfterViewInit {
   actionColumnSticky?: boolean = false;
 
   @Input()
-  columnPanel?: boolean = false
+  columnPanel?: boolean = false;
+
+  @Input()
+  toggleSearchResult?: boolean = false;
+
+  @Input()
+  pageSizeOptions: number[] = [];
+
+  @Input()
+  xColumnsExport?: number[] = []
+
+  @Input()
+  exportFileName?: string = "table-export"
 
 //emit events
   @Output()
@@ -44,9 +56,15 @@ export class BeGridComponent implements OnInit, AfterViewInit {
 
   @Output()
   onActionButton: EventEmitter<any> = new EventEmitter();
-  
+
   @Output()
   rowSelection: EventEmitter<any> = new EventEmitter();
+
+  @Output()
+  searchResult: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  @Output()
+  pageChange: EventEmitter<any> = new EventEmitter<any>();
 
   @ViewChild(MatSort) sort?: MatSort;
   @ViewChild(MatPaginator) paginator?: MatPaginator;
@@ -56,17 +74,18 @@ export class BeGridComponent implements OnInit, AfterViewInit {
   selection = new SelectionModel<any>(true, []);
   additionalColumns: string[] = []
 
-  contextmenu: boolean= false;
+  contextmenu: boolean = false;
   contextmenuX: number = 0;
   contextmenuY: number = 0;
 
   constructor(private liveAnnouncer: LiveAnnouncer) {}
 
   ngOnInit(): void {
+    this.xColumnsExport = [5]
     this.tableRowData.data = this.rowData
     this.displayedColumns = this.defColumns.map(cols => cols.name);
     this.additionalColumns = Object.keys({...this.rowData}[0])
-   }
+  }
 
   // column reassign sorted data
   ngAfterViewInit() {
@@ -74,7 +93,7 @@ export class BeGridComponent implements OnInit, AfterViewInit {
     this.tableRowData.paginator = this.paginator;
   }
 
-  // when row/cell is clicked 
+  // when row/cell is clicked
   onRowClick(row: any, event: any) {
     if(event.target.id != "appButton" && event.target.id != "actionRow"){
       this.rowClick.emit(row);
@@ -90,6 +109,9 @@ export class BeGridComponent implements OnInit, AfterViewInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.tableRowData.filter = filterValue.trim().toLowerCase();
+
+    //checking and emit boolean result
+    if(this.toggleSearchResult) { this.searchResult.emit(this.tableRowData.filteredData.length > 0) }
   }
 
   // column sort annouce sort change
@@ -110,7 +132,7 @@ export class BeGridComponent implements OnInit, AfterViewInit {
 // checkbox for cells and headers
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    const numSelected = this.selection.selected.length;    
+    const numSelected = this.selection.selected.length;
     const numRows = this.tableRowData.data.length;
     return numSelected === numRows;
   }
@@ -121,31 +143,33 @@ export class BeGridComponent implements OnInit, AfterViewInit {
       this.selection.clear();
       return;
     }
-    this.selection.select(...this.tableRowData.data);    
+    this.selection.select(...this.tableRowData.data);
   }
 
   /** The label for the checkbox on the passed row */
   checkboxLabel(row?: any): string {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }    
+    }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
-  
+
   onRowSelection() {
     this.rowSelection.emit({selectedRows: this.selection.selected})
+    //on row selection, hide context menu
+    this.hideContextMenu()
   }
 
 
   // column panel
   // checking all displayedColumns in the column panel
   isDisplayedColumns(column: string): boolean {
-   let isChecked = this.displayedColumns.find((data:any) => data === column)
-    return isChecked? true : false
+    let isChecked = this.displayedColumns.find((data:any) => data === column)
+    return !!isChecked
   }
 
   // adding and removing columns from displayedColumns
-  addColumn(column: string){   
+  addColumn(column: string){
     let isAvailable = this.displayedColumns.find((data:any) => data === column);
 
     if(isAvailable != undefined){
@@ -159,16 +183,21 @@ export class BeGridComponent implements OnInit, AfterViewInit {
     }
   }
 
-   //activates the menu with the coordinates
-   onrightClick(event: any){
+  //activates the menu with the coordinates
+  onRightClick(event: any){
     this.contextmenuX=event.clientX
     this.contextmenuY=event.clientY
-    this.contextmenu=true;
+    this.contextmenu = true;
   }
 
   //disables the menu
-  disableContextMenu(){
-    this.contextmenu= false;
+  hideContextMenu(){
+    this.contextmenu = false;
+  }
+
+  //emit current page size
+  pageSizeChange(page: any) {
+    this.pageChange.emit(page)
   }
 
 }

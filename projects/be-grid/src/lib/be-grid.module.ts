@@ -10,10 +10,12 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
-import { CdkDropList, CdkDrag } from '@angular/cdk/drag-drop';
+import { CdkDropList, CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
 import { BeGridComponent } from './component/be-grid/be-grid.component';
 import { BeButtonComponent } from './component/be-button/be-button.component';
 import { BeContextMenuComponent } from './component/be-context-menu/be-context-menu.component';
+import {MatTableExporterModule} from "mat-table-exporter";
+import {ContextMenuService} from "./component/be-context-menu/context-menu.service";
 
 @NgModule({
   declarations: [
@@ -33,13 +35,16 @@ import { BeContextMenuComponent } from './component/be-context-menu/be-context-m
     MatSortModule,
     MatPaginatorModule,
     CdkDropList, 
-    CdkDrag
+    CdkDrag,
+    DragDropModule,
+    MatTableExporterModule,
   ],
   exports: [
     BeGridComponent,
     BeButtonComponent,
-    BeContextMenuComponent
+    BeContextMenuComponent,
   ],
+  providers: [  ContextMenuService ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 export class BeGridModule { }

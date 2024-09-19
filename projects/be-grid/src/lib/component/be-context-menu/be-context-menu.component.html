@@ -1,6 +1,15 @@
 <div class="contextmenu" [ngStyle]="{'left.px': x, 'top.px': y}">
-    <span class="menu-item"><i class="fa-solid fa-table-cells"></i>Export to Excel</span>
-    <span class="menu-item"><i class="fa-solid fa-file-csv"></i>Export to CSV</span>
-    <span class="seperator"></span>
-    <span class="menu-item">Save</span>
+    <div *ngIf="toggleExport">
+        <span class="menu-item" (click)="excelExportDownload()"><i class="fa-regular fa-file-excel"></i><span class="label">Excel Export</span></span>
+        <span class="menu-item" (click)="csvExportDownload()"><i class="fa-solid fa-file-csv"></i><span class="label">CSV Export</span></span>
+    </div>
+
+    <span class="separator"></span>
+
+    <div *ngFor="let item of contextMenu.contextMenuItems">
+      <span class="menu-item" (click)="item.action">
+        <i class="{{ item.icon?.className }}" [ngStyle]="{ 'color': item.icon?.color }"></i>
+        <span class="label">{{ item.label }}</span>
+      </span>
+    </div>
 </div>

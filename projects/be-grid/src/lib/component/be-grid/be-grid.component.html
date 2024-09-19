@@ -1,111 +1,121 @@
-<div class="main-wrapper" (click)="disableContextMenu()" oncontextmenu="return false;">
-    
+<div class="main-wrapper" (click)="hideContextMenu()" oncontextmenu="return false;">
+
     <!-- search table input field-->
     <div class="search-wrapper">
         <input *ngIf="filter" class="search-input" type="search"  placeholder="Search" (keyup)="applyFilter($event)" #input>
         <i class="fa-solid fa-magnifying-glass"></i>
     </div>
-    
 
-    <div class="table-column-panel-wrapper" [ngStyle]="{width: width, height: height}">
-    
-    <!-- scrollable table wrapper -->
-    <section class="table-scrollable mat-elevation-z8" tabindex="0" >
-         <!-- context menu -->
-    <be-context-menu [x]="contextmenuX" [y]="contextmenuY" *ngIf="contextmenu"></be-context-menu>
-    <!-- table def -->
-    <table mat-table 
-            [dataSource]="tableRowData" 
-            class="mat-elevation-z8" 
-            matSort
-            cdkDropList 
-            (matSortChange)="announceSortChange($event)"
-            cdkDropList
-            cdkDropListOrientation="horizontal"
-            (cdkDropListDropped)="drop($event)">
+    <div class="table-column-panel-wrapper" (contextmenu)="onRightClick($event)" [ngStyle]="{width: width, height: height}">
 
-        <!-- column name definition -->
-        <ng-container *ngFor="let column of defColumns" >
-            <ng-container matColumnDef="{{ column.name }}" [stickyEnd]="column.name == 'action' && actionColumnSticky">
+        <!-- scrollable table wrapper -->
+        <section class="table-scrollable mat-elevation-z8" tabindex="0" >
 
-                <!-- headers here -->
-                <th mat-header-cell *matHeaderCellDef cdkDrag mat-sort-header disabled="{{!column.columnSortable}}" sortActionDescription="{{'Sort by '+column.name}}">
-                    <mat-checkbox *ngIf="column.name != 'action' && column.rowSelection" (change)="$event ? toggleAllRows() : null"
-                        [checked]="selection.hasValue() && isAllSelected()"
-                        [indeterminate]="selection.hasValue() && !isAllSelected()"
-                        [color]="'primary'"
-                        (click)="onRowSelection()"
-                        [aria-label]="checkboxLabel()">
-                    </mat-checkbox>
-                    <ng-container *ngIf="column.label; then label; else name"></ng-container>
-                    <ng-template #label>{{column.label}}</ng-template>
-                    <ng-template #name>{{column.name | titlecase}}</ng-template>
-                </th>
+            <!-- context menu -->
+            <be-context-menu
+                    *ngIf="contextmenu"
+                    [x]="contextmenuX"
+                    [y]="contextmenuY"
+                    [toggleExport]="true"
+                    (excelExport)="exporter.exportTable('xlsx', {fileName: exportFileName})"
+                    (csvExport)="exporter.exportTable('csv', {fileName: exportFileName})"
+            ></be-context-menu>
 
-                <!-- cell style -->
-                <td mat-cell *matCellDef="let element" [ngStyle]="column.hasOwnProperty('cellStyle')? column.cellStyle(element): {}">
+            <!-- table def -->
+            <table mat-table
+                   [dataSource]="tableRowData"
+                   class="mat-elevation-z8"
+                   matSort
+                   cdkDropList
+                   (matSortChange)="announceSortChange($event)"
+                   cdkDropListOrientation="horizontal"
+                   (cdkDropListDropped)="drop($event)"
+                   matTableExporter
+                   #exporter="matTableExporter"
+                   [hiddenColumns]="xColumnsExport">
 
-                    <!-- row data here -->
-                    <span  class="cell-style">
-                        <mat-checkbox *ngIf="column.name != 'action' && column.rowSelection" (click)="$event.stopPropagation()"
-                            (change)="$event ? selection.toggle(element) : null"
-                            [checked]="selection.isSelected(element)"
-                            [color]="'primary'"
-                            (click)="onRowSelection()"
-                            [aria-label]="checkboxLabel(element)">
+                <!-- column name definition -->
+                <ng-container *ngFor="let column of defColumns" >
+                    <ng-container matColumnDef="{{ column.name }}" [stickyEnd]="column.name == 'action' && actionColumnSticky">
+
+                        <!-- headers here -->
+                        <th mat-header-cell *matHeaderCellDef cdkDrag mat-sort-header disabled="{{!column.columnSortable}}" sortActionDescription="{{'Sort by '+column.name}}">
+                            <mat-checkbox *ngIf="column.name != 'action' && column.rowSelection" (change)="$event ? toggleAllRows() : null"
+                                          [checked]="selection.hasValue() && isAllSelected()"
+                                          [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                          [color]="'primary'"
+                                          (click)="onRowSelection()"
+                                          [aria-label]="checkboxLabel()">
+                            </mat-checkbox>
+                            <ng-container *ngIf="column.label; then label; else name"></ng-container>
+                            <ng-template #label>{{column.label}}</ng-template>
+                            <ng-template #name>{{column.name | titlecase}}</ng-template>
+                        </th>
+
+                        <!-- cell style -->
+                        <td mat-cell *matCellDef="let element" [ngStyle]="column.hasOwnProperty('cellStyle')? column.cellStyle(element): {}">
+
+                            <!-- row data here -->
+                            <span  class="cell-style">
+                        <mat-checkbox *ngIf="column.name != 'action' && column.rowSelection"
+                                      (click)="$event.stopPropagation(); onRowSelection()"
+                                      (change)="$event ? selection.toggle(element) : null"
+                                      [checked]="selection.isSelected(element)"
+                                      [color]="'primary'"
+                                      [aria-label]="checkboxLabel(element)">
                         </mat-checkbox>
                         <span>{{ element[column.name] }}</span>
-                        <!-- cell flag -->
+                                <!-- cell flag -->
                         <span *ngIf="column.hasOwnProperty('cellFlag')" [ngStyle]="column.hasOwnProperty('cellFlag')? column.cellFlag(element).style:{}" class="cell-flag">{{column.cellFlag(element).flagText}}</span>
                     </span>
 
-                    <!-- action button here -->
-                    <span class="action-btns" *ngIf="column.actionButtons">
+                            <!-- action button here -->
+                            <span class="action-btns" *ngIf="column.actionButtons">
                     <be-button *ngFor="let actionButton of column.actionButtons"
-                        id="actionRow"
-                        [label]="actionButton.label"
-                        [rowData]="element"
-                        [type]="actionButton.type"
-                        [color]="actionButton.color"
-                        [disabledButton]="actionButton.hasOwnProperty('disabledButton') && actionButton.disabledButton(element)"
-                        [hidden]="actionButton.hasOwnProperty('hideButton') && actionButton.hideButton(element)"
-                        (btnClicked)="buttonClick($event)"
+                                id="actionRow"
+                                [label]="actionButton.label"
+                                [rowData]="element"
+                                [type]="actionButton.type"
+                                [color]="actionButton.color"
+                                [disabledButton]="actionButton.hasOwnProperty('disabledButton') && actionButton.disabledButton(element)"
+                                [hidden]="actionButton.hasOwnProperty('hideButton') && actionButton.hideButton(element)"
+                                (btnClick)="buttonClick($event)"
                     ></be-button>
                     </span>
-                </td>
-            </ng-container>
-        </ng-container>
+                        </td>
+                    </ng-container>
+                </ng-container>
 
-        <!-- tr for rows and headers -->
-        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row, $event)"></tr>
+                <!-- tr for rows and headers -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row, $event)"></tr>
 
-        <!-- no rows/data -->
-        <tr class="mat-row" *matNoDataRow >
-            <td class="mat-cell" colspan="12" class="no-data">No data available</td>
-        </tr>
-    </table>
-</section>
+                <!-- no rows/data -->
+                <tr class="mat-row" *matNoDataRow >
+                    <td colspan="12" class="mat-cell no-data">No data available</td>
+                </tr>
+            </table>
+        </section>
 
-<!-- column panel -->
-<div class="column-panel" *ngIf="columnPanel">
-    <span class="colum-panel-title">Column Panel</span>
-    <div class="column-panel-list">
-    <mat-checkbox 
-        *ngFor="let column of additionalColumns"
-        [checked]="isDisplayedColumns(column)"
-        (click)="addColumn(column)"
-        [color]="'primary'"
-        >{{ column | titlecase }}</mat-checkbox> 
+        <!-- column panel -->
+        <div class="column-panel" *ngIf="columnPanel">
+            <span class="colum-panel-title">Column Panel</span>
+            <div class="column-panel-list">
+                <mat-checkbox
+                        *ngFor="let column of additionalColumns"
+                        [checked]="isDisplayedColumns(column)"
+                        (click)="addColumn(column)"
+                        [color]="'primary'"
+                >{{ column | titlecase }}</mat-checkbox>
+            </div>
+        </div>
     </div>
-</div>
-</div>
 
     <!-- pagenatin here -->
-    <mat-paginator *ngIf="paging" 
-      [pageSizeOptions]="[10, 20, 30]"
-      showFirstLastButtons
-      aria-label="Select page of periodic elements">
+    <mat-paginator *ngIf="paging"
+                   [pageSizeOptions]="pageSizeOptions"
+                   showFirstLastButtons
+                   aria-label="Select page of periodic elements"
+                   (page)="pageSizeChange($event)">
     </mat-paginator>
 </div>
-

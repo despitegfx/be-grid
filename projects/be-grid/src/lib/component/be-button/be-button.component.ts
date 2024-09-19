@@ -7,22 +7,22 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class BeButtonComponent {
   @Input()
-    label?: string;
-    @Input()
-    type?: string;
-    @Input()
-    color?: string;
-    @Input()
-    disabledButton?: boolean | false;
-    @Input()
-    hideButton?: boolean | false;
-    @Input()
-    rowData: any;
+  label?: string;
+  @Input()
+  type?: string;
+  @Input()
+  color?: string;
+  @Input()
+  disabledButton?: boolean | false;
+  @Input()
+  hideButton?: boolean | false;
+  @Input()
+  rowData: any;
 
-    @Output()
-    btnClicked: EventEmitter<any> = new EventEmitter<any>();
+  @Output()
+  btnClick: EventEmitter<any> = new EventEmitter<any>();
 
-    actionClick(action?: string) {
-      this.btnClicked.emit({row: this.rowData, action: action})
-    }
+  actionClick(action?: string) {
+    this.btnClick.emit({row: this.rowData, action: action})
+  }
 }

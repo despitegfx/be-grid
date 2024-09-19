@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {ContextMenuService} from "./context-menu.service";
 
 @Component({
   selector: 'be-context-menu',
@@ -6,8 +7,15 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./be-context-menu.component.css']
 })
 export class BeContextMenuComponent {
-  constructor() { }
-
   @Input() x=0;
   @Input() y=0;
+  @Input() toggleExport: boolean = true;
+
+  @Output() excelExport: EventEmitter<any> = new EventEmitter<any>()
+  @Output() csvExport: EventEmitter<any> = new EventEmitter<any>()
+
+  constructor(public contextMenu: ContextMenuService) { }
+
+  excelExportDownload() { this.excelExport.emit() }
+  csvExportDownload() { this.csvExport.emit() }
 }

@@ -89,7 +89,7 @@ table th {
 }
 
 .no-data{
-    text-align: center; 
+    text-align: center;
     padding: 100px;
     color: rgb(170, 170, 170);
 }
@@ -112,4 +112,17 @@ table th {
     padding: 5px;
     font-size: 11px;
     border-radius: 3px;
+}
+
+::ng-deep .mdc-checkbox__background {
+    border-color: #0F4C8A !important;
+    padding: 3px !important;
+}
+
+::ng-deep .mdc-checkbox__checkmark-path {
+    stroke-width: 3px!important;
+}
+
+::ng-deep .search-wrapper {
+    border-width: 2px;
 }
