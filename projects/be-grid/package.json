@@ -1,6 +1,37 @@
 {
   "name": "be-grid",
-  "version": "1.1.0",
+  "version": "1.1.1",
+  "description": "Table library for Angular",
+  "pivate": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/despitegfx/be-grid"
+  },
+  "author": {
+    "name": "Emmanuel Bonsu",
+    "email": "despitegfx@gmail.com"
+  },
+  "keywords": [
+    "angular",
+    "frontend",
+    "contextmenu",
+    "context-menu",
+    "contextMenu",
+    "angular 15",
+    "typescript",
+    "table",
+    "angular mat",
+    "angular material",
+    "angular material table",
+    "grid",
+    "begrid",
+    "be-grid",
+    "beGrid",
+    "be",
+    "agGrid",
+    "ag-grid",
+    "despitegfx"
+  ],
   "peerDependencies": {
     "@angular/common": "^15.2.0",
     "@angular/core": "^15.2.0"
