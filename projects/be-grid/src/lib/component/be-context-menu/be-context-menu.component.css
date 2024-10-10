@@ -1,7 +1,7 @@
 .contextmenu{
     display: flex;
     flex-direction: column;
-    position: absolute;
+    position: fixed;
     z-index: 1000;
     background: rgb(248, 248, 248);
     box-shadow: 0 5px 20px 5px rgb(0, 0, 0, 0.1);
