@@ -1,7 +1,4 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -10,12 +7,13 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
-import { CdkDropList, CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
 import { BeGridComponent } from './component/be-grid/be-grid.component';
 import { BeButtonComponent } from './component/be-button/be-button.component';
 import { BeContextMenuComponent } from './component/be-context-menu/be-context-menu.component';
 import {MatTableExporterModule} from "mat-table-exporter";
 import {ContextMenuService} from "./component/be-context-menu/context-menu.service";
+import {DragDropModule} from "@angular/cdk/drag-drop";
+import {CommonModule} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -24,8 +22,7 @@ import {ContextMenuService} from "./component/be-context-menu/context-menu.servi
     BeContextMenuComponent,
   ],
   imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
+    CommonModule,
     MatSlideToggleModule,
     MatTableModule,
     MatCheckboxModule,
@@ -34,15 +31,13 @@ import {ContextMenuService} from "./component/be-context-menu/context-menu.servi
     MatIconModule,
     MatSortModule,
     MatPaginatorModule,
-    CdkDropList, 
-    CdkDrag,
     DragDropModule,
-    MatTableExporterModule,
+    MatTableExporterModule
   ],
   exports: [
     BeGridComponent,
     BeButtonComponent,
-    BeContextMenuComponent,
+    BeContextMenuComponent
   ],
   providers: [  ContextMenuService ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
