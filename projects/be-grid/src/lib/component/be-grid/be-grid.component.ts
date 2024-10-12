@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output, AfterViewInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, AfterViewInit, ViewChild, OnChanges, SimpleChanges} from '@angular/core';
 import DefColumns from '../../model/DefColumns';
-import { MatTableDataSource } from '@angular/material/table';
+import {MatTableDataSource} from '@angular/material/table';
 import {MatSort, Sort} from '@angular/material/sort';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
-import { MatPaginator } from '@angular/material/paginator';
+import {MatPaginator} from '@angular/material/paginator';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {SelectionModel} from '@angular/cdk/collections';
 
@@ -12,7 +12,7 @@ import {SelectionModel} from '@angular/cdk/collections';
   templateUrl: './be-grid.component.html',
   styleUrls: ['./be-grid.component.css']
 })
-export class BeGridComponent implements OnInit, AfterViewInit {
+export class BeGridComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Input()
   width?: string = "0"
@@ -78,15 +78,20 @@ export class BeGridComponent implements OnInit, AfterViewInit {
   contextmenuX: number = 0;
   contextmenuY: number = 0;
 
-  constructor(private liveAnnouncer: LiveAnnouncer) {}
+  constructor(private liveAnnouncer: LiveAnnouncer) {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const rows = changes['rowData'].currentValue;
+    if(rows.length > 0) {
+      this.tableRowData.data = rows
+      this.additionalColumns = Object.keys({...this.rowData}[0])
+    }
+  }
 
   ngOnInit(): void {
     this.xColumnsExport = [5]
-    this.tableRowData.data = this.rowData
     this.displayedColumns = this.defColumns.map(cols => cols.name);
-    if(this.rowData.length > 0) {
-      this.additionalColumns = Object.keys({...this.rowData}[0])
-    }
   }
 
   // column reassign sorted data
