@@ -84,7 +84,9 @@ export class BeGridComponent implements OnInit, AfterViewInit {
     this.xColumnsExport = [5]
     this.tableRowData.data = this.rowData
     this.displayedColumns = this.defColumns.map(cols => cols.name);
-    this.additionalColumns = Object.keys({...this.rowData}[0])
+    if(this.rowData.length > 0) {
+      this.additionalColumns = Object.keys({...this.rowData}[0])
+    }
   }
 
   // column reassign sorted data
