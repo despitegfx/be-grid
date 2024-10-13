@@ -88,8 +88,9 @@
 
                 <!-- tr for rows and headers -->
                 <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <ng-container *ngIf="rowData.length > 0">
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row, $event)"></tr>
-
+                </ng-container>
                 <!-- no rows/data -->
                 <tr class="mat-row" *matNoDataRow >
                     <td colspan="12" class="mat-cell no-data">No data available</td>

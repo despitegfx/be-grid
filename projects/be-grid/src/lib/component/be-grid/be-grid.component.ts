@@ -90,7 +90,6 @@ export class BeGridComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.xColumnsExport = [5]
     this.displayedColumns = this.defColumns.map(cols => cols.name);
   }
 
