@@ -48,7 +48,7 @@ export class BeGridComponent implements OnInit, AfterViewInit, OnChanges {
   xColumnsExport?: number[] = [];
 
   @Input()
-  toggleExport?: boolean = false
+  toggleExport: boolean = false
 
   @Input()
   exportFileName?: string = "table-export"
