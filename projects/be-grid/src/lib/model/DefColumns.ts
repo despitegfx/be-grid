@@ -15,3 +15,8 @@ export interface ActionButtons {
     disabledButton?: any;
     hideButton?: any;
 }
+
+export interface Loader{
+    text: boolean,
+    value: string
+}

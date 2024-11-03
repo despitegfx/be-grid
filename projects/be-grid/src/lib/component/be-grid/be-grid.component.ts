@@ -1,27 +1,28 @@
-import {Component, EventEmitter, Input, OnInit, Output, AfterViewInit, ViewChild, OnChanges, SimpleChanges} from '@angular/core';
-import DefColumns from '../../model/DefColumns';
+import {Component, EventEmitter, Input, OnInit, Output, AfterViewInit, ViewChild } from '@angular/core';
+import DefColumns, {Loader} from '../../model/DefColumns';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort, Sort} from '@angular/material/sort';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
 import {MatPaginator} from '@angular/material/paginator';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {SelectionModel} from '@angular/cdk/collections';
+import {BehaviorSubject} from "rxjs";
 
 @Component({
   selector: 'be-grid',
   templateUrl: './be-grid.component.html',
   styleUrls: ['./be-grid.component.css']
 })
-export class BeGridComponent implements OnInit, AfterViewInit, OnChanges {
+export class BeGridComponent implements AfterViewInit, OnInit {
 
   @Input()
-  width?: string = "0"
+  width?: string = "0";
 
   @Input()
-  height?: string = "0"
+  height?: string = "0";
 
   @Input()
-  rowData: any[] = [];
+  rowData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   @Input()
   defColumns: DefColumns[] = [];
@@ -48,13 +49,22 @@ export class BeGridComponent implements OnInit, AfterViewInit, OnChanges {
   xColumnsExport?: number[] = [];
 
   @Input()
-  toggleExport: boolean = false
+  toggleExport: boolean = true;
 
   @Input()
   exportFileName?: string = "table-export"
 
   @Input()
-  multiRowSelect?: boolean = false
+  multiRowSelect?: boolean = false;
+
+  @Input()
+  exportActions?: boolean = false;
+
+  @Input()
+  showLoader: boolean = false;
+
+  @Input()
+  showLoaderMsg: Loader = {text: true, value: "loading..."}
 
 //emit events
   @Output()
@@ -67,7 +77,7 @@ export class BeGridComponent implements OnInit, AfterViewInit, OnChanges {
   rowSelection: EventEmitter<any> = new EventEmitter();
 
   @Output()
-  searchResult: EventEmitter<boolean> = new EventEmitter<boolean>();
+  search: EventEmitter<string> = new EventEmitter<string>();
 
   @Output()
   pageChange: EventEmitter<any> = new EventEmitter<any>();
@@ -87,16 +97,12 @@ export class BeGridComponent implements OnInit, AfterViewInit, OnChanges {
   constructor(private liveAnnouncer: LiveAnnouncer) {
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    const rows = changes['rowData'].currentValue;
-    if(rows.length > 0) {
-      this.tableRowData.data = rows
-      this.additionalColumns = Object.keys({...this.rowData}[0])
-    }
-  }
-
   ngOnInit(): void {
     this.displayedColumns = this.defColumns.map(cols => cols.name);
+    this.rowData.subscribe((data) => {
+        this.tableRowData.data = data
+        this.additionalColumns = Object.keys({...data[0]});
+    })
   }
 
   // column reassign sorted data
@@ -121,9 +127,12 @@ export class BeGridComponent implements OnInit, AfterViewInit, OnChanges {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.tableRowData.filter = filterValue.trim().toLowerCase();
+    this.search.emit(filterValue);
+  }
 
-    //checking and emit boolean result
-    if(this.toggleSearchResult) { this.searchResult.emit(this.tableRowData.filteredData.length > 0) }
+  onSearch() {
+    // searched value result
+    this.search.emit(this.tableRowData.filter)
   }
 
   // column sort annouce sort change
@@ -175,7 +184,6 @@ export class BeGridComponent implements OnInit, AfterViewInit, OnChanges {
     //on row selection, hide context menu
     this.hideContextMenu()
   }
-
 
   // column panel
   // checking all displayedColumns in the column panel

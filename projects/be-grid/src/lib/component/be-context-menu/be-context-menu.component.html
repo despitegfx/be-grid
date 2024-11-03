@@ -7,7 +7,7 @@
     <span class="separator"></span>
 
     <div *ngFor="let item of contextMenu.contextMenuItems">
-      <span class="menu-item" (click)="item.action">
+      <span class="menu-item" (click)="item.action()">
         <i class="{{ item.icon?.className }}" [ngStyle]="{ 'color': item.icon?.color }"></i>
         <span class="label">{{ item.label }}</span>
       </span>

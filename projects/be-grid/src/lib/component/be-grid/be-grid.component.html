@@ -1,9 +1,15 @@
 <div class="main-wrapper" (click)="hideContextMenu()" oncontextmenu="return false;">
 
     <!-- search table input field-->
-    <div class="search-wrapper" *ngIf="filter">
-        <input class="search-input" type="search"  placeholder="Search" (search)="applyFilter($event)" (keyup)="applyFilter($event)" #input>
-        <i class="fa-solid fa-magnifying-glass"></i>
+    <div class="top-items">
+        <div class="search-wrapper" *ngIf="filter">
+            <input class="search-input" type="search"  placeholder="Search" (search)="applyFilter($event)" (keyup)="applyFilter($event)" #input>
+            <i (click)="onSearch()" class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <div class="top-action-items" *ngIf="exportActions">
+            <span (click)="exporter.exportTable('xlsx', {fileName: exportFileName})" ><i class="fa-regular fa-file-excel"></i> Excel</span>
+            <span (click)="exporter.exportTable('csv', {fileName: exportFileName})"><i class="fa-solid fa-file-csv"></i> CSV</span>
+        </div>
     </div>
 
     <div class="table-column-panel-wrapper" (contextmenu)="onRightClick($event)" [ngStyle]="{width: width, height: height}">
@@ -93,7 +99,9 @@
 
                 <!-- no rows/data -->
                 <tr class="mat-row" *matNoDataRow >
-                    <td colspan="12" class="mat-cell no-data">No data available</td>
+                    <td colspan="12" class="mat-cell no-data" *ngIf="showLoader && !showLoaderMsg.text"><img [src]="showLoaderMsg.value" width="150" alt="loading..."></td>
+                    <td colspan="12" class="mat-cell no-data" *ngIf="showLoader && showLoaderMsg.text">{{ showLoaderMsg.value }}</td>
+                    <td colspan="12" class="mat-cell no-data" *ngIf="!showLoader">No data available</td>
                 </tr>
             </table>
         </section>

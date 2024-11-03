@@ -1,3 +1,9 @@
+.top-items{
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    align-items: center;
+}
 
 .search-wrapper{
     display: flex;
@@ -9,7 +15,7 @@
     border-color: rgb(217, 217, 217);
     color: rgb(121, 121, 121);
     width: fit-content;
-    padding-inline: 10px;
+    padding-inline-start: 10px;
     border-radius: 2px;
 }
 
@@ -20,6 +26,55 @@
     font-size: 14pt;
     color: rgb(94, 94, 94);
     border-style: none;
+}
+
+.fa-magnifying-glass{
+    display: flex;
+    flex-direction: row;
+    background: rgb(217, 217, 217);
+    color: rgb(130, 130, 130);
+    padding-inline: 8px;
+    align-items: center;
+    cursor: pointer;
+    height: 40px;
+}
+
+.fa-magnifying-glass:hover{
+    background: rgb(224, 224, 224);
+    transition: 0.3s ease-in;
+}
+
+.fa-magnifying-glass:active{
+    background: rgb(217, 217, 217);
+    transition: 0.3s ease-out;
+}
+
+.top-action-items{
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+}
+
+.top-action-items span{
+    padding-inline: 8px;
+    padding-block: 5px;
+    border-color: rgb(194, 194, 194);
+    color: rgb(121, 121, 121);
+    background: rgb(233, 233, 233);
+    border-style: solid;
+    border-radius: 3px;
+    border-width: 1px;
+    cursor: pointer;
+}
+
+.top-action-items span:hover{
+    background: rgb(241, 241, 241);
+    transition: 0.3s ease-in-out;
+}
+
+.top-action-items span:active{
+    background: rgb(220, 220, 220);
+    transition: 0.3s ease-in-out;
 }
 
 .table-column-panel-wrapper{
@@ -46,7 +101,7 @@
 
 .colum-panel-title{
     background: rgb(245, 245, 245);
-    padding: 17.8px;
+    padding: 17.5px;
     position: static;
     width: 100%;
     border-bottom-style: solid;
@@ -73,6 +128,10 @@
 table {
     width: inherit;
     box-shadow: none;
+}
+
+.mat-mdc-table {
+    white-space: nowrap!important;
 }
 
 table th {
