@@ -8,6 +8,7 @@ export class ContextMenuService {
   contextMenuItems?: ContextMenu[] = [];
 
   contextMenu(contextMenu?: ContextMenu[]) {
+    this.contextMenuItems = [];
     this.contextMenuItems = contextMenu;
   }
 }

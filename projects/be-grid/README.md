@@ -31,6 +31,21 @@ Same as what we have for angular mat.
 * Sortable Columns
 Same as what we have for angular mat.
 
+## Bugs fixed
+***
+* Unable to hide filter (search input) completly
+* Table do not update when the cancel event is clicked in the search box
+* ContextMenu state do not change in other component after it has been updated in previous component
+
+## New Features
+***
+* Automatically selects a row when right-clicked on the row in the table.
+* Disable/Enable Export actions in ContextMenu
+  * To do this, set `[toggleExport] = true/false` in `<be-grid>` **selector**
+* Cell-styling now takes effect on the data itself but not the entire cell
+* Disable/Enable Selection of Multiple Rows
+  * To do this, set `[multiRowSelect] = true/false` in `<be-grid>` **selector**
+  * And `rowSelection: true/false` in **DefColumns**
 
 ## Installation
 

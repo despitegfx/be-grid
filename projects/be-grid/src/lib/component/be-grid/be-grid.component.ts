@@ -45,10 +45,16 @@ export class BeGridComponent implements OnInit, AfterViewInit, OnChanges {
   pageSizeOptions: number[] = [];
 
   @Input()
-  xColumnsExport?: number[] = []
+  xColumnsExport?: number[] = [];
+
+  @Input()
+  toggleExport?: boolean = false
 
   @Input()
   exportFileName?: string = "table-export"
+
+  @Input()
+  multiRowSelect?: boolean = false
 
 //emit events
   @Output()
@@ -160,8 +166,12 @@ export class BeGridComponent implements OnInit, AfterViewInit, OnChanges {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
 
-  onRowSelection() {
-    this.rowSelection.emit({selectedRows: this.selection.selected})
+  onRowSelection(selectedRow?: any, singleRow?: boolean) {
+    if (singleRow && !this.multiRowSelect){
+      this.rowSelection.emit({selectedRows: [selectedRow]});
+    }else {
+      this.rowSelection.emit({selectedRows: this.selection.selected});
+    }
     //on row selection, hide context menu
     this.hideContextMenu()
   }
