@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output, AfterViewInit, ViewChild } from '@angular/core';
-import DefColumns, {Loader} from '../../model/DefColumns';
+import DefColumns, {ActionButtons, Loader} from '../../model/DefColumns';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort, Sort} from '@angular/material/sort';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
@@ -61,6 +61,12 @@ export class BeGridComponent implements AfterViewInit, OnInit {
   exportActions?: boolean = false;
 
   @Input()
+  positionTopPanel?: string = "space-between";
+
+  @Input()
+  customButtons?: ActionButtons [] = [];
+
+  @Input()
   showLoader: boolean = false;
 
   @Input()
@@ -72,6 +78,9 @@ export class BeGridComponent implements AfterViewInit, OnInit {
 
   @Output()
   onActionButton: EventEmitter<any> = new EventEmitter();
+
+  @Output()
+  onCustomButton: EventEmitter<any> = new EventEmitter<any>();
 
   @Output()
   rowSelection: EventEmitter<any> = new EventEmitter();
@@ -121,6 +130,11 @@ export class BeGridComponent implements AfterViewInit, OnInit {
   // when action button on a row is clicked
   buttonClick(event:any) {
     this.onActionButton.emit(event);
+  }
+
+  // when custom button is clicked
+  customButtonClicked(event: any) {
+    this.onCustomButton.emit(event);
   }
 
   // filtering/searching through table

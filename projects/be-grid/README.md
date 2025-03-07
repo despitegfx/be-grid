@@ -31,21 +31,23 @@ Same as what we have for angular mat.
 * Sortable Columns
 Same as what we have for angular mat.
 
-## Bugs fixed
-***
-* Unable to hide filter (search input) completly
-* Table do not update when the cancel event is clicked in the search box
-* ContextMenu state do not change in other component after it has been updated in previous component
-
 ## New Features
 ***
-* Automatically selects a row when right-clicked on the row in the table.
-* Disable/Enable Export actions in ContextMenu
-  * To do this, set `[toggleExport] = true/false` in `<be-grid>` **selector**
-* Cell-styling now takes effect on the data itself but not the entire cell
-* Disable/Enable Selection of Multiple Rows
-  * To do this, set `[multiRowSelect] = true/false` in `<be-grid>` **selector**
-  * And `rowSelection: true/false` in **DefColumns**
+* Able to add dropdown action button for rows in the table
+  * To do this, `{name: "action", actionButtons: [
+        {label: 'Action', type: 'dropdown', dropDownActions: () => ['Recommend', 'Edit']}
+    ]},`
+  * To apply condition(show or hide item), `{name: "action", actionButtons: [
+         {label: 'Action', type: 'dropdown', dropDownActions: (data?: any) => {return (data.under == "C")? ['Recommend', 'Edit'] : ['Edit']} },
+     ]},`
+
+* Able to justify-content of search & exports actions panel
+    * To do this, `set 'positionTopPanel' to justify-content values. Such as (flex-start, flex-end, space-between, space-even, space-around, right, left)`
+
+* Able to add custom buttons in addition to the export buttons
+    * To do this, `[customButtons]=[{label: "", color: "<blue/red/green/yellow>", type: "<fill/outline>"}]`
+    * To get button event, `(onCustomButton)= <methodName($event)>`
+
 
 ## Installation
 

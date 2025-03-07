@@ -14,6 +14,7 @@ import {MatTableExporterModule} from "mat-table-exporter";
 import {ContextMenuService} from "./component/be-context-menu/context-menu.service";
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {CommonModule} from "@angular/common";
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import {CommonModule} from "@angular/common";
     MatSortModule,
     MatPaginatorModule,
     DragDropModule,
-    MatTableExporterModule
+    MatTableExporterModule,
+    MatSelectModule
   ],
   exports: [
     BeGridComponent,

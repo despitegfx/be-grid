@@ -14,6 +14,7 @@ export interface ActionButtons {
     color?: string;
     disabledButton?: any;
     hideButton?: any;
+    dropDownActions?: any;
 }
 
 export interface Loader{

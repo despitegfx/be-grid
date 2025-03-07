@@ -18,6 +18,8 @@ export class BeButtonComponent {
   hideButton?: boolean | false;
   @Input()
   rowData: any;
+  @Input()
+  actions?: any = []
 
   @Output()
   btnClick: EventEmitter<any> = new EventEmitter<any>();

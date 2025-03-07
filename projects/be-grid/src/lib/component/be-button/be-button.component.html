@@ -59,4 +59,10 @@ id="appButton"
 [disabled]="disabledButton"
 >{{label}}</button>
 
-
+<mat-form-field appearance="outline" *ngIf="type=='dropdown'" id="dropdown" class="dropdown-action">
+    <mat-select placeholder="{{label}}">
+        <mat-option *ngFor="let action of actions" [value]="action" (click)="actionClick(action.toLocaleLowerCase())">
+            {{action}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
